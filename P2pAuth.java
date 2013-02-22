@@ -2,7 +2,7 @@
 
 
 
-private class P2pAuth implements JChatAuthenticator
+public class P2pAuth implements JChatAuthenticator
 {
 
 

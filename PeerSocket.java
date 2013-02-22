@@ -2,7 +2,7 @@
 
 
 
-private class PeerSocket implements JChatSocket
+public class PeerSocket implements JChatSocket
 {
 
 

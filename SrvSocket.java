@@ -2,7 +2,7 @@
 
 
 
-private class SrvSocket implements JChatSocket
+public class SrvSocket implements JChatSocket
 {
 
 

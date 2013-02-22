@@ -2,7 +2,7 @@
 
 
 
-private class SrvAuth implements JChatAuthenticator
+public class SrvAuth implements JChatAuthenticator
 {
 
     public void SrvAuth(SrvSocket jcs) 

@@ -2,7 +2,7 @@
 
 
 
-private class P2pSocket implements JChatSocket
+public class P2pSocket implements JChatSocket
 {
 
 

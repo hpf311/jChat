@@ -2,7 +2,7 @@
 
 
 
-private class PeerAuth implements JChatAuthenticator
+public class PeerAuth implements JChatAuthenticator
 {
 
     public void PeerAuth(PeerSocket jcs) 

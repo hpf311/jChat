@@ -2,7 +2,7 @@
 
 
 
-private interface JChatCom
+public interface JChatCom
 {
 
     private JChatAuthenticator jca ;

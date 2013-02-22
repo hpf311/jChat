@@ -2,7 +2,7 @@
 
 
 
-private class JChatStart
+public class JChatStart
 {
 
 

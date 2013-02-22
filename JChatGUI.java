@@ -2,7 +2,7 @@
 
 
 
-private interface JChatGUI
+public interface JChatGUI
 {
 
 

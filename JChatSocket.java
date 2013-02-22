@@ -2,7 +2,7 @@
 
 
 
-private interface JChatSocket
+public interface JChatSocket
 {
 
 

@@ -2,7 +2,7 @@
 
 
 
-private class P2pCom implements JChatCom
+public class P2pCom implements JChatCom
 {
 
 
