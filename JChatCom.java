@@ -5,9 +5,10 @@
 public interface JChatCom
 {
 
-    private JChatAuthenticator jca ;
+    public JChatAuthenticator jca = null;
 
-    private JChatGUI jcg ;
-
+    public JChatGUI jcg = null;
+    public void sendMessage (String message);
+    public void stopConnection();
 
 }

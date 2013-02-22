@@ -4,6 +4,6 @@
 
 public interface JChatSocket
 {
-
+	public void stopConnection();
 
 }

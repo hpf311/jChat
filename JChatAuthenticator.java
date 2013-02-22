@@ -5,7 +5,10 @@
 public interface JChatAuthenticator
 {
 
-    private JChatSocket jcs ;
+    public JChatSocket jcs = null;
+    
+    public void sendMessage (String message);
+    public void stopConnection();
 
 
 }
