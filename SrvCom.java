@@ -8,27 +8,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * Serverlogik
+ * @author Thomas Traxler
+ * @version 2013-02-22
+ *
+ */
 
 public class SrvCom extends Thread implements JChatCom
 {
 	private JChatAuthenticator jca;
     private JChatGUI jcg;
-    private List<BufferedReader> lbr;
-    private List<Listener> ll;
-    
-	private List<BufferedReader> incomming = Collections.synchronizedList(new ArrayList());
+    private List<BufferedReader> lbr;//Clientinputs
+    private List<Listener> ll;//Threads zu entprechenden Clientinputs
 
     public void SrvCom(SrvAuth jca, JChatGUI jcg) 
     {
         this.jca=jca;
         this.jcg=jcg;
-        this.incomming=jca.getReader();
         this.lbr=jca.getReader();
         this.start();
     }
     
-    
+    /**
+     * Ueberprueft ob alle Clients einen Thread haben, bzw. erstellt fuer jeden Client einen
+     */
     public void run(){
     	while(true){
     		try {
@@ -44,7 +48,14 @@ public class SrvCom extends Thread implements JChatCom
     		}
     	}
     }
-
+    
+    /**
+     * Server ChatListener
+     * Leitet ausgehende nachrichten an sendMessage weiter und fuegt sie der lokalen Anzeige hinzu
+     * Leitet Beenden ein.
+     * @author Thomas Traxler
+     *
+     */
     private class SrvChatListener implements ChatListener {
 
     	public void actionPerformed(ActionEvent e) {	
@@ -57,7 +68,11 @@ public class SrvCom extends Thread implements JChatCom
     			jca.stopConnection();
     	}
     }
-    
+    /**
+     * Listenerthread für einen Clientinput
+     * @author Thomas Traxler
+     *
+     */
     private class Listener extends Thread {
     	private BufferedReader br;
     	
@@ -73,8 +88,12 @@ public class SrvCom extends Thread implements JChatCom
 					e1.printStackTrace();
 				}
     			try {
-    				if(br.ready())
-    					jcg.addMessage(br.readLine());
+
+					String message =br.readLine() ;
+    				if(message != ""){
+    					jcg.addMessage(message);//fuegt eingehende Nachricht lokal hinzu
+    					jca.sendMessage(message);//leitet eingehende Nachricht an alle Clients weiter.
+    				}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

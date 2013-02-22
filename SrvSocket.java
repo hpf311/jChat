@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
+/**
+ * Serververbindung nach aussen.
+ * @author Thomas Traxler
+ *
+ */
 public class SrvSocket extends Thread implements JChatSocket
 {
 	
@@ -18,13 +22,16 @@ public class SrvSocket extends Thread implements JChatSocket
 	
 	public SrvSocket(){
 		try {
-			srvS = new ServerSocket(1492);
+			srvS = new ServerSocket(1492);//Verbindung auf Port 1492
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		this.start();
 	}
-	
+	/**
+	 * Sended eine Message an alle outgoing streams
+	 * @param message
+	 */
 	public void sendMessage (String message){
 		for(int i = 0;i < outgoing.size();i++){
 			outgoing.get(i).print(message);
@@ -38,10 +45,14 @@ public class SrvSocket extends Thread implements JChatSocket
 	
 	public Socket accept () throws IOException {
 		
-		return srvS.accept();
+		return srvS.accept();//Gibt auf Anfrage Socket zurueck, blockiert bis zur Anfrage 
 		
 	}
-	
+	/**
+	 * Fiegt Client und passende input und output streams den Listen hinzu
+	 * @param s
+	 * @throws IOException
+	 */
 	public void addClient( Socket s) throws IOException{
 		
 			clients.add(s);

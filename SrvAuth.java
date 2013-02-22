@@ -4,11 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
-
+/**
+ * Authentifizierungsebene des Servers
+ * @author Thomas Traxler
+ * @version
+ */
 
 public class SrvAuth extends Thread implements JChatAuthenticator
 {
-	private SrvSocket jcs;
+	private SrvSocket jcs; //Socket
 
     public void SrvAuth(SrvSocket jcs) 
     {

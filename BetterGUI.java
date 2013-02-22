@@ -2,7 +2,7 @@
 
 
 
-public class BetterGUI implements JChatGUI
+public abstract class BetterGUI implements JChatGUI
 {
 
 

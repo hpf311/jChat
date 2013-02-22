@@ -8,7 +8,11 @@ import javax.swing.event.*;
 
 import java.lang.*;
 import java.util.*;
-
+/**
+ * GUI, aus Beispiel angepasst 
+ * @author Thomas Traxler
+ * @version 2013-02-22
+ */
 public class SimpleGUI extends JPanel  implements JChatGUI{
  
   public JTextArea chatText = null;
@@ -80,7 +84,9 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
   //   frame.pack();
   //   frame.setVisible(true);
   // }
-
+/**
+ * Zeigt neue Message an.
+ */
   public void addMessage( String inMessage ) {
     chatText.append( inMessage + "\n" );
   }
