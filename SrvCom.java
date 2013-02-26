@@ -61,11 +61,11 @@ public class SrvCom extends Thread implements JChatCom
     	public void actionPerformed(ActionEvent e) {	
     		String message = jcg.equalsChatLine(e.getSource());
     		if ( !message.equals("") ) {
-    			jca.sendMessage(jcg.getName()+":"+message + "\n");
+    			sendMessage(jcg.getName()+":"+message + "\n");
     			jcg.addMessage(jcg.getName()+":"+message);
     		}
     		if ( jcg.equalsDisconnect(e.getSource()))
-    			jca.stopConnection();
+    			stopConnection();
     	}
     }
     /**
@@ -88,15 +88,17 @@ public class SrvCom extends Thread implements JChatCom
 					e1.printStackTrace();
 				}
     			try {
-
-					String message =br.readLine() ;
-    				if(message != ""){
-    					jcg.addMessage(message);//fuegt eingehende Nachricht lokal hinzu
-    					jca.sendMessage(message);//leitet eingehende Nachricht an alle Clients weiter.
+    				if(br.ready()){
+    					String message =br.readLine() ;
+    					if(message != ""){
+    						jcg.addMessage(message);//fuegt eingehende Nachricht lokal hinzu
+    						sendMessage(message);//leitet eingehende Nachricht an alle Clients weiter.
+    					}
     				}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+    			} catch (IOException e) {
+    				e.printStackTrace();
+    			}
+    			
     		}
     	}
     }

@@ -32,6 +32,7 @@ public class SrvSocket extends Thread implements JChatSocket
 	 * Sended eine Message an alle outgoing streams
 	 * @param message
 	 */
+	@Override
 	public void sendMessage (String message){
 		for(int i = 0;i < outgoing.size();i++){
 			outgoing.get(i).print(message);
@@ -48,6 +49,7 @@ public class SrvSocket extends Thread implements JChatSocket
 		return srvS.accept();//Gibt auf Anfrage Socket zurueck, blockiert bis zur Anfrage 
 		
 	}
+	
 	/**
 	 * Fiegt Client und passende input und output streams den Listen hinzu
 	 * @param s
@@ -60,7 +62,8 @@ public class SrvSocket extends Thread implements JChatSocket
 			outgoing.add( new PrintWriter(s.getOutputStream(), true));
 			
 	}
-
+	
+	@Override
 	public void stopConnection() {
 		// TODO Auto-generated method stub
 		
