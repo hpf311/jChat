@@ -14,7 +14,7 @@ public class SrvAuth extends Thread implements JChatAuthenticator
 {
 	private SrvSocket jcs; //Socket
 
-    public void SrvAuth(SrvSocket jcs) 
+    public SrvAuth(SrvSocket jcs) 
     {
         this.jcs=jcs;
         this.start();

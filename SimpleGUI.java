@@ -22,13 +22,18 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
   public JButton disconnectButton = null;
 
   private ChatListener chatListener = null;
+  private String name;
 
-  public SimpleGUI(ChatListener cl){
-    this(cl, ("Client_"+(int)(Math.random()*9999+1)));
+  public SimpleGUI(){
+    this(("Client_"+(int)(Math.random()*9999+1)));
+  }
+  
+  public SimpleGUI(String name){
+	  super(new BorderLayout());
+	  this.name = name;
   }
 
-  public SimpleGUI(ChatListener cl, String name) {
-    super(new BorderLayout());
+  public void AddChatListener(ChatListener cl) {
     chatListener = cl;
 
     JPanel optionsPane = new JPanel(new GridLayout(3, 1));

@@ -1,5 +1,6 @@
 ﻿package jChat;
 
+
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,10 +15,11 @@ public class PeerCom extends Thread implements JChatCom
 	private BufferedReader br;
 	
 	
-    public void PeerCom(PeerAuth jca, JChatGUI jcg) 
+    public PeerCom(PeerAuth jca, JChatGUI jcg) 
     {
         this.jca=jca;
         this.jcg=jcg;
+        jcg.AddChatListener(new PeerChatListener());
     }
     
     
@@ -46,7 +48,7 @@ public class PeerCom extends Thread implements JChatCom
     public void run(){
 		while(true){
 			try {
-				this.wait(100);
+				this.sleep(100);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}

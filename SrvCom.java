@@ -22,11 +22,14 @@ public class SrvCom extends Thread implements JChatCom
     private List<BufferedReader> lbr;//Clientinputs
     private List<Listener> ll;//Threads zu entprechenden Clientinputs
 
-    public void SrvCom(SrvAuth jca, JChatGUI jcg) 
+    public SrvCom(SrvAuth jca, JChatGUI jcg) 
     {
+    	lbr = new ArrayList<BufferedReader>();
+    	ll = new ArrayList<Listener>();
         this.jca=jca;
         this.jcg=jcg;
         this.lbr=jca.getReader();
+        jcg.AddChatListener(new SrvChatListener());
         this.start();
     }
     
@@ -36,7 +39,7 @@ public class SrvCom extends Thread implements JChatCom
     public void run(){
     	while(true){
     		try {
-    			this.wait(1000);
+    			this.sleep(1000);
     		} catch (InterruptedException e1) {
     			e1.printStackTrace();
     		}
@@ -83,7 +86,7 @@ public class SrvCom extends Thread implements JChatCom
     	public void run(){
     		while(true){
     			try {
-					this.wait(100);
+					this.sleep(100);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}

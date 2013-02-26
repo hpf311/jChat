@@ -12,4 +12,5 @@ public interface JChatGUI
 	  public boolean equalsDisconnect (Object button);
 	  public String equalsChatLine(Object source);
 	  public String getName();
+	  public void AddChatListener(ChatListener cl);
 }

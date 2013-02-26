@@ -9,7 +9,7 @@ public class PeerAuth implements JChatAuthenticator
 	
 	private PeerSocket jcs;
 
-    public void PeerAuth(PeerSocket jcs) 
+    public PeerAuth(PeerSocket jcs) 
     {
         this.jcs=jcs;
     }
