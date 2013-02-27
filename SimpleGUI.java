@@ -98,8 +98,9 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
   
   public String equalsChatLine (Object chatline){
 	  if(this.chatLine == chatline){
+		  String c = chatLine.getText(); 
 		  chatLine.setText("");
-		  return chatLine.getText();
+		  return c;
 	  }
 	  return "";
   }
@@ -111,7 +112,16 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
   }
 
   public String getName(){
-	  return myName.getName();
+	  return name;
+  }
+  
+  public static boolean chooser (){
+	  String[] a = {"Server", "Client"};
+	  
+	  if(JOptionPane.showOptionDialog(null, "Test", "Titel", 1, 1, null, a , "Server") == 1)
+		  return true;
+	  return false;
+	  
   }
 
   

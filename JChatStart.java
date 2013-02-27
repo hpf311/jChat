@@ -1,6 +1,7 @@
 ﻿package jChat;
 
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -21,19 +22,24 @@ public class JChatStart
     }
 
 
-    public static void main(String[] args) {
-        InetSocketAddress isa = new InetSocketAddress("127.0.0.1", 1492);
-        PeerSocket ps = new PeerSocket(isa);
-        PeerAuth pa = new PeerAuth(ps);
-        SimpleGUI sg1 = new SimpleGUI();
-        PeerCom pc = new PeerCom(pa, sg1);
-
-        SrvSocket ss = new SrvSocket();
-        SrvAuth sa = new SrvAuth(ss);
-        SimpleGUI sg2 = new SimpleGUI();
-        SrvCom sc = new SrvCom(sa, sg2);
-        createAndShowGUI(sg2);
-        createAndShowGUI(sg1);
+    public static void main(String[] args) throws UnknownHostException {
+    	if(SimpleGUI.chooser()!=true){
+    		
+    		 SrvSocket ss = new SrvSocket();
+    	     SrvAuth sa = new SrvAuth(ss);
+    	     SimpleGUI sg2 = new SimpleGUI();
+    	     SrvCom sc = new SrvCom(sa, sg2);
+    	     createAndShowGUI(sg2);
+    	}else{
+    		
+    		InetSocketAddress isa = new InetSocketAddress(InReader.ipReader(), 11492);
+    		PeerSocket ps = new PeerSocket(isa);
+    		PeerAuth pa = new PeerAuth(ps);
+    		SimpleGUI sg1 = new SimpleGUI();
+    		PeerCom pc = new PeerCom(pa, sg1);
+    		createAndShowGUI(sg1);
+    	}
+       
     }
 
 }

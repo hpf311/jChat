@@ -22,7 +22,7 @@ public class SrvSocket extends Thread implements JChatSocket
 	
 	public SrvSocket(){
 		try {
-			srvS = new ServerSocket(1492);//Verbindung auf Port 1492
+			srvS = new ServerSocket(11492);//Verbindung auf Port 1492
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

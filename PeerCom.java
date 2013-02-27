@@ -20,6 +20,9 @@ public class PeerCom extends Thread implements JChatCom
         this.jca=jca;
         this.jcg=jcg;
         jcg.AddChatListener(new PeerChatListener());
+        jca.connect();
+        br = jca.getReader();
+        this.start();
     }
     
     

@@ -19,6 +19,7 @@ public class SrvCom extends Thread implements JChatCom
 {
 	private JChatAuthenticator jca;
     private JChatGUI jcg;
+    private SrvChatListener scl;
     private List<BufferedReader> lbr;//Clientinputs
     private List<Listener> ll;//Threads zu entprechenden Clientinputs
 
@@ -29,7 +30,9 @@ public class SrvCom extends Thread implements JChatCom
         this.jca=jca;
         this.jcg=jcg;
         this.lbr=jca.getReader();
-        jcg.AddChatListener(new SrvChatListener());
+        scl = new SrvChatListener();
+        jcg.AddChatListener(scl);
+        jcg.addMessage("Server gestartet");
         this.start();
     }
     
@@ -44,7 +47,7 @@ public class SrvCom extends Thread implements JChatCom
     			e1.printStackTrace();
     		}
     		if(lbr.size()>ll.size()){
-    			for (int i = ll.size()-1;i < lbr.size();i++){
+    			for (int i = ll.size();i < lbr.size();i++){
     				ll.add(new Listener(lbr.get(i)));
     				ll.get(i).start();
     			}
@@ -63,8 +66,8 @@ public class SrvCom extends Thread implements JChatCom
 
     	public void actionPerformed(ActionEvent e) {	
     		String message = jcg.equalsChatLine(e.getSource());
-    		if ( !message.equals("") ) {
-    			sendMessage(jcg.getName()+":"+message + "\n");
+    		if ( !message.equals("")) {
+    			sendMessage(jcg.getName()+":"+message);
     			jcg.addMessage(jcg.getName()+":"+message);
     		}
     		if ( jcg.equalsDisconnect(e.getSource()))
@@ -108,7 +111,7 @@ public class SrvCom extends Thread implements JChatCom
 
 	@Override
 	public void sendMessage(String message) {
-		jca.sendMessage(message);
+		jca.sendMessage(message+"\n");
 		
 	}
 
