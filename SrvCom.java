@@ -14,7 +14,7 @@ import java.util.List;
  * @version 2013-02-22
  *
  */
-
+//TODO: In/Out streams in 1 Objekt verpacken, Kommando verwaltung nur Serverseitig Client-Objekte mit weiteren Daten ausstatten
 public class SrvCom extends Thread implements JChatCom
 {
 	private JChatAuthenticator jca;
@@ -97,8 +97,15 @@ public class SrvCom extends Thread implements JChatCom
     				if(br.ready()){
     					String message =br.readLine() ;
     					if(message != ""){
-    						jcg.addMessage(message);//fuegt eingehende Nachricht lokal hinzu
-    						sendMessage(message);//leitet eingehende Nachricht an alle Clients weiter.
+    						if(message.split(":",2)[1].charAt(0)!='/'){
+    							jcg.addMessage(message);//fuegt eingehende Nachricht lokal hinzu
+    							sendMessage(message);//leitet eingehende Nachricht an alle Clients weiter.
+    						}else{
+    							message = message+" \\";
+    							String [] splitM = message.split(":",2)[1].split(" ",2);
+    							if (splitM[0].equals("/error"))
+    								System.out.println("Error: "+splitM[1]);
+    						}
     					}
     				}
     			} catch (IOException e) {
@@ -111,6 +118,7 @@ public class SrvCom extends Thread implements JChatCom
 
 	@Override
 	public void sendMessage(String message) {
+		
 		jca.sendMessage(message+"\n");
 		
 	}

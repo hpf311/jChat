@@ -65,7 +65,6 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     chatLine = new JTextField();
     chatLine.setEnabled(true);
-
     chatLine.addActionListener( chatListener );
 
     chatPane.add(chatLine, BorderLayout.SOUTH);
@@ -115,14 +114,12 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
 	  return name;
   }
   
-  public static boolean chooser (){
-	  String[] a = {"Server", "Client"};
-	  
-	  if(JOptionPane.showOptionDialog(null, "Test", "Titel", 1, 1, null, a , "Server") == 1)
-		  return true;
-	  return false;
-	  
+  public void setName(String name){
+	  this.name=name;
+	  this.myName.setText(name);
   }
+  
+  
 
   
 }
