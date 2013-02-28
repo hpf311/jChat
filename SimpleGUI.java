@@ -91,7 +91,7 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
 /**
  * Zeigt neue Message an.
  */
-  public void addMessage( String inMessage ) {
+  public void addMessage( String inMessage, int[] args) {
     chatText.append( inMessage + "\n" );
   }
   

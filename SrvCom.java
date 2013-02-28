@@ -33,7 +33,7 @@ public class SrvCom extends Thread implements JChatCom
         this.ll=jca.getPeer();
         scl = new SrvChatListener();
         jcg.AddChatListener(scl);
-        jcg.addMessage("Server gestartet");
+        jcg.addMessage("Server gestartet",null);
         this.start();
     }
     
@@ -73,7 +73,7 @@ public class SrvCom extends Thread implements JChatCom
     		String message = jcg.equalsChatLine(e.getSource());
     		if ( !message.equals("")) {
     			sendMessage(jcg.getName()+":"+message);
-    			jcg.addMessage(jcg.getName()+":"+message);
+    			jcg.addMessage(jcg.getName()+":"+message, null);
     		}
     		if ( jcg.equalsDisconnect(e.getSource()))
     			stopConnection();
@@ -112,7 +112,7 @@ public class SrvCom extends Thread implements JChatCom
     					String message =br.readLine() ;
     					if(message != ""){
     						if(message.split(":",2)[1].charAt(0)!='/'){
-    							jcg.addMessage(message);//fuegt eingehende Nachricht lokal hinzu
+    							jcg.addMessage(message, null);//fuegt eingehende Nachricht lokal hinzu
     							sendMessage(message);//leitet eingehende Nachricht an alle Clients weiter.
     						}else{
     							message = message+" \\";

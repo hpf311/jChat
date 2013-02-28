@@ -59,7 +59,7 @@ public class PeerCom extends Thread implements JChatCom
 				if(br.ready()){
 					String message =br.readLine() ;
 					if(message != ""){
-						jcg.addMessage(message);//fuegt eingehende Nachricht lokal hinzu
+						jcg.addMessage(message,null);//fuegt eingehende Nachricht lokal hinzu
 					}
 				}
 			} catch (IOException e) {

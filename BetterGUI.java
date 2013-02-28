@@ -7,7 +7,7 @@ public class BetterGUI implements JChatGUI
 {
 
 	@Override
-	public void addMessage(String inMessage) {
+	public void addMessage(String inMessage, int[] args) {
 		// TODO Auto-generated method stub
 		
 	}
