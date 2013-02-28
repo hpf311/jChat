@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,22 +17,20 @@ import java.util.List;
  * @version 2013-02-22
  *
  */
-//TODO: In/Out streams in 1 Objekt verpacken, Kommando verwaltung nur Serverseitig Client-Objekte mit weiteren Daten ausstatten
+//TODO: Kommando verwaltung nur Serverseitig Client-Objekte mit weiteren Daten ausstatten
 public class SrvCom extends Thread implements JChatCom
 {
 	private JChatAuthenticator jca;
     private JChatGUI jcg;
     private SrvChatListener scl;
-    private List<BufferedReader> lbr;//Clientinputs
-    private List<Listener> ll;//Threads zu entprechenden Clientinputs
+    private List<Peer> ll;//Threads zu entprechenden Clientinputs
 
     public SrvCom(SrvAuth jca, JChatGUI jcg) 
     {
-    	lbr = new ArrayList<BufferedReader>();
-    	ll = new ArrayList<Listener>();
+    	ll = new ArrayList<Peer>();
         this.jca=jca;
         this.jcg=jcg;
-        this.lbr=jca.getReader();
+        this.ll=jca.getPeer();
         scl = new SrvChatListener();
         jcg.AddChatListener(scl);
         jcg.addMessage("Server gestartet");
@@ -40,18 +41,22 @@ public class SrvCom extends Thread implements JChatCom
      * Ueberprueft ob alle Clients einen Thread haben, bzw. erstellt fuer jeden Client einen
      */
     public void run(){
+    	Peer p;
     	while(true){
     		try {
-    			this.sleep(1000);
+    			Thread.sleep(100);
     		} catch (InterruptedException e1) {
     			e1.printStackTrace();
     		}
-    		if(lbr.size()>ll.size()){
-    			for (int i = ll.size();i < lbr.size();i++){
-    				ll.add(new Listener(lbr.get(i)));
-    				ll.get(i).start();
-    			}
-    		}
+    		p=new Peer("init");
+    		try {
+				jca.accept(p);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    		ll.add(p);
+    		p.start();
+    		
     	}
     }
     
@@ -79,11 +84,20 @@ public class SrvCom extends Thread implements JChatCom
      * @author Thomas Traxler
      *
      */
-    private class Listener extends Thread {
+    public class Peer extends Thread implements APeer{
     	private BufferedReader br;
+    	private PrintWriter pw;
+    	private String peerName;
+    	private Socket s;
     	
-    	private Listener(BufferedReader br){
-    		this.br = br;    	
+    	public Peer(String name){
+    		this.peerName = name;    	
+    	}
+    	
+    	public void addSocket( Socket s) throws IOException{
+    		this.s=s;
+    		this.br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+    		this.pw = new PrintWriter(s.getOutputStream(), true);
     	}
     	
     	public void run(){
@@ -114,6 +128,22 @@ public class SrvCom extends Thread implements JChatCom
     			
     		}
     	}
+
+		public String getPeerName() {
+			return peerName;
+		}
+
+		public void setPeerName(String name) {
+			this.peerName = name;
+		}
+
+		public BufferedReader getBr() {
+			return br;
+		}
+
+		public PrintWriter getPw() {
+			return pw;
+		}
     }
 
 	@Override

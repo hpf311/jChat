@@ -1,5 +1,7 @@
 ﻿package jChat;
 
+import jChat.SrvCom.Peer;
+
 import java.lang.*;
 import java.io.*;
 import java.net.*;
@@ -16,9 +18,7 @@ public class SrvSocket extends Thread implements JChatSocket
 {
 	
 	private ServerSocket srvS;
-	private List<Socket> clients = Collections.synchronizedList(new ArrayList());
-	private List<PrintWriter> outgoing = Collections.synchronizedList(new ArrayList());
-	private List<BufferedReader> incomming = Collections.synchronizedList(new ArrayList());
+	private List<Peer> clients = Collections.synchronizedList(new ArrayList());
 	
 	public SrvSocket(){
 		try {
@@ -34,19 +34,19 @@ public class SrvSocket extends Thread implements JChatSocket
 	 */
 	@Override
 	public void sendMessage (String message){
-		for(int i = 0;i < outgoing.size();i++){
-			outgoing.get(i).print(message);
-			outgoing.get(i).flush();
+		for(int i = 0;i < clients.size();i++){
+			clients.get(i).getPw().print(message);
+			clients.get(i).getPw().flush();
 		}
 	}
 	
-	public List<BufferedReader> getReader (){
-		return incomming;
+	public List<Peer> getPeer (){
+		return clients;
 	}
 	
-	public Socket accept () throws IOException {
+	public void accept (APeer p) throws IOException {
 		
-		return srvS.accept();//Gibt auf Anfrage Socket zurueck, blockiert bis zur Anfrage 
+		p.addSocket(srvS.accept());//Gibt auf Anfrage Socket zurueck, blockiert bis zur Anfrage 
 		
 	}
 	
@@ -55,11 +55,9 @@ public class SrvSocket extends Thread implements JChatSocket
 	 * @param s
 	 * @throws IOException
 	 */
-	public void addClient( Socket s) throws IOException{
+	public void addClient( Peer p) throws IOException{
 		
-			clients.add(s);
-			incomming.add(new BufferedReader(new InputStreamReader(s.getInputStream())));
-			outgoing.add( new PrintWriter(s.getOutputStream(), true));
+			clients.add(p);
 			
 	}
 	

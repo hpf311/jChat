@@ -1,6 +1,7 @@
 ﻿package jChat;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 
 
 
@@ -32,6 +33,12 @@ public class PeerAuth implements JChatAuthenticator
 	
 	public BufferedReader getReader (){
 		return jcs.getReader();
+	}
+
+	@Override
+	public void accept(APeer p) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 
