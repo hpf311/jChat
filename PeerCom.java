@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import org.eclipse.swt.widgets.Event;
+
 
 
 public class PeerCom extends Thread implements JChatCom
@@ -37,14 +39,28 @@ public class PeerCom extends Thread implements JChatCom
      */
     private class PeerChatListener implements ChatListener {
 
-    	public void actionPerformed(ActionEvent e) {	
-    		String message = jcg.equalsChatLine(e.getSource());
-    		if ( !message.equals("") ) {
-    			sendMessage(message + "\n");
-    		}
-    		if ( jcg.equalsDisconnect(e.getSource()))
-    			stopConnection();
-    	}
+//    	public void actionPerformed(ActionEvent e) {	
+//    		String message = jcg.equalsChatLine(e.getSource());
+//    		if ( !message.equals("") ) {
+//    			sendMessage(message + "\n");
+//    		}
+//    		if ( jcg.equalsDisconnect(e.getSource()))
+//    			stopConnection();
+//    	}
+    	
+    	@Override
+		public void handleEvent(Event e) {
+			if (e.character=='\b'){
+				
+			}else{
+				String message = ""; 
+				message = jcg.equalsChatLine(e.widget);
+				if (!message.equals("")){
+					sendMessage(message+ "\n");
+				}
+			}
+			
+		}
     }
     
     

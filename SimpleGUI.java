@@ -50,7 +50,7 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
     disconnectButton = new JButton("Disconnect");
     disconnectButton.setMnemonic(KeyEvent.VK_D);
     disconnectButton.setActionCommand("disconnect");
-    disconnectButton.addActionListener( chatListener );
+//    disconnectButton.addActionListener( chatListener );
     disconnectButton.setEnabled(true);
     buttonPane.add(disconnectButton);
     optionsPane.add(buttonPane);
@@ -65,7 +65,7 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     chatLine = new JTextField();
     chatLine.setEnabled(true);
-    chatLine.addActionListener( chatListener );
+//    chatLine.addActionListener( chatListener );
 
     chatPane.add(chatLine, BorderLayout.SOUTH);
     chatPane.add(chatTextPane, BorderLayout.CENTER);

@@ -75,18 +75,22 @@ public class BetterGUI implements JChatGUI
 		scrolledComposite_1.setContent(table_1);
 		scrolledComposite_1.setMinSize(table_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
-		tablecount = 0;
-		
-		
+		tablecount = 1;
+		s.open();
+		  while (!s.isDisposed()) {
+		   if (!d.readAndDispatch()) {
+		    d.sleep();
+		   }
+		        }
 	}
 	
 	
 
 	@Override
 	public void addMessage(String inMessage, int[] args) {
-		table.getItem(1).setForeground(new Color (new Printer(), 255,0,0));
+//		table.getItem(1).setForeground(new Color (new Printer(), 255,0,0));
 		
-		table.getItem(tablecount).setText(inMessage);
+//		table.getItems()[1].setText(inMessage);//TODO Richten
 		tablecount++;
 		
 	}

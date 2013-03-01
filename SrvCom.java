@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+
 /**
  * Serverlogik
  * @author Thomas Traxler
@@ -67,17 +70,32 @@ public class SrvCom extends Thread implements JChatCom
      * @author Thomas Traxler
      *
      */
-    private class SrvChatListener implements ChatListener {
+    public class SrvChatListener implements ChatListener {
 
-    	public void actionPerformed(ActionEvent e) {	
-    		String message = jcg.equalsChatLine(e.getSource());
-    		if ( !message.equals("")) {
-    			sendMessage("SERVER: "+message);
-    			jcg.addMessage("SERVER: "+message, null);
-    		}
-    		if ( jcg.equalsDisconnect(e.getSource()))
-    			stopConnection();
-    	}
+//    	public void actionPerformed(ActionEvent e) {	
+//    		String message = jcg.equalsChatLine(e.getSource());
+//    		if ( !message.equals("")) {
+//    			sendMessage("SERVER: "+message);
+//    			jcg.addMessage("SERVER: "+message, null);
+//    		}
+//    		if ( jcg.equalsDisconnect(e.getSource()))
+//    			stopConnection();
+//    	}
+
+		@Override
+		public void handleEvent(Event e) {
+			if (e.character=='\b'){
+				
+			}else{
+				String message = ""; 
+				message = jcg.equalsChatLine(e.widget);
+				if (!message.equals("")){
+					sendMessage("SERVER: "+message);
+	    			jcg.addMessage("SERVER: "+message, null);
+				}
+			}
+			
+		}
     }
     /**
      * Listenerthread für einen Clientinput
