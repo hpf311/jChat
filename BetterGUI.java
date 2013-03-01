@@ -108,7 +108,7 @@ public class BetterGUI implements JChatGUI
 
 	@Override
 	public void setName(String name) {
-		
+		//TODO Tu was
 		
 	}
 }
