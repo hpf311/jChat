@@ -72,8 +72,8 @@ public class SrvCom extends Thread implements JChatCom
     	public void actionPerformed(ActionEvent e) {	
     		String message = jcg.equalsChatLine(e.getSource());
     		if ( !message.equals("")) {
-    			sendMessage(jcg.getName()+":"+message);
-    			jcg.addMessage(jcg.getName()+":"+message, null);
+    			sendMessage("SERVER: "+message);
+    			jcg.addMessage("SERVER: "+message, null);
     		}
     		if ( jcg.equalsDisconnect(e.getSource()))
     			stopConnection();
@@ -98,6 +98,8 @@ public class SrvCom extends Thread implements JChatCom
     		this.s=s;
     		this.br = new BufferedReader(new InputStreamReader(s.getInputStream()));
     		this.pw = new PrintWriter(s.getOutputStream(), true);
+    		
+    		pw.print("/name "+peerName+"\n");
     	}
     	
     	public void run(){
@@ -111,14 +113,19 @@ public class SrvCom extends Thread implements JChatCom
     				if(br.ready()){
     					String message =br.readLine() ;
     					if(message != ""){
-    						if(message.split(":",2)[1].charAt(0)!='/'){
-    							jcg.addMessage(message, null);//fuegt eingehende Nachricht lokal hinzu
-    							sendMessage(message);//leitet eingehende Nachricht an alle Clients weiter.
+    						if(message.charAt(0)!='/'){
+    							jcg.addMessage(peerName+":"+message, null);//fuegt eingehende Nachricht lokal hinzu
+    							sendMessage(peerName+":"+message);//leitet eingehende Nachricht an alle Clients weiter.
     						}else{
-    							message = message+" \\";
-    							String [] splitM = message.split(":",2)[1].split(" ",2);
+    							message = message+" ";
+    							String [] splitM = message.split(" ",2);
     							if (splitM[0].equals("/error"))
     								System.out.println("Error: "+splitM[1]);
+    							else if (splitM[0].equals("/name")){
+    								peerName = splitM[1];
+    								pw.print("/name "+splitM[1]+"\n");
+    								pw.flush();
+    							}
     						}
     					}
     				}

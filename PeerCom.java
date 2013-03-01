@@ -40,7 +40,7 @@ public class PeerCom extends Thread implements JChatCom
     	public void actionPerformed(ActionEvent e) {	
     		String message = jcg.equalsChatLine(e.getSource());
     		if ( !message.equals("") ) {
-    			sendMessage(jcg.getName()+":"+message + "\n");
+    			sendMessage(message + "\n");
     		}
     		if ( jcg.equalsDisconnect(e.getSource()))
     			stopConnection();
@@ -59,7 +59,13 @@ public class PeerCom extends Thread implements JChatCom
 				if(br.ready()){
 					String message =br.readLine() ;
 					if(message != ""){
-						jcg.addMessage(message,null);//fuegt eingehende Nachricht lokal hinzu
+						if(message.charAt(0)!='/')
+							jcg.addMessage(message,null);//fuegt eingehende Nachricht lokal hinzu
+						else {
+							if(message.split(" ")[0].equals("/name")){
+								jcg.setName(message.split(" ",2)[1]);
+							}
+						}
 					}
 				}
 			} catch (IOException e) {

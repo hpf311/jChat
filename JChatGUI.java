@@ -11,6 +11,6 @@ public interface JChatGUI
 	  public void addMessage( String inMessage , int[] args);
 	  public boolean equalsDisconnect (Object button);
 	  public String equalsChatLine(Object source);
-	  public String getName();
 	  public void AddChatListener(ChatListener cl);
+	  public void setName (String name);
 }

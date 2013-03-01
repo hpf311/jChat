@@ -109,16 +109,14 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
 		  return true;
 	  return false;
   }
-
-  public String getName(){
-	  return name;
-  }
   
-  public void setName(String name){
+  public void setName (String name){
 	  this.name=name;
-	  this.myName.setText(name);
+	  myName.setText("");
+	  myName.setText(name);
   }
-  
+
+
   
 
   

@@ -24,11 +24,8 @@ public class JChatStart
 
     public static void main(String[] args) throws UnknownHostException {
     	if(InReader.chooser()!=true){
-    		
-    		 SrvSocket ss = new SrvSocket();
-    	     SrvAuth sa = new SrvAuth(ss);
     	     SimpleGUI sg2 = new SimpleGUI("Server");
-    	     SrvCom sc = new SrvCom(sa, sg2);
+    	     SrvCom sc = new SrvCom(new SrvAuth(new SrvSocket()), sg2);
     	     createAndShowGUI(sg2);
     	}else{
     		
