@@ -38,6 +38,15 @@ public class BetterGUI implements JChatGUI
 		MenuItem mntmDatei = new MenuItem(menu, SWT.NONE);
 		mntmDatei.setText("Datei");
 		
+		MenuItem mntmSettings = new MenuItem(menu, SWT.CASCADE);
+		mntmSettings.setText("Settings");
+		
+		Menu menu_1 = new Menu(mntmSettings);
+		mntmSettings.setMenu(menu_1);
+		
+		MenuItem mntmSetName = new MenuItem(menu_1, SWT.NONE);
+		mntmSetName.setText("set Name");
+		
 		scrolledComposite = new ScrolledComposite(s, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(BorderLayout.EAST);
 		scrolledComposite.setExpandHorizontal(true);
