@@ -84,10 +84,13 @@ public class SrvCom extends Thread implements JChatCom
 
 		@Override
 		public void handleEvent(Event e) {
+			System.out.println("A");
+			String message = ""; 
+			message = jcg.equalsChatLine(e.widget);
 			if (e.character=='\b'){
 				
 			}else{
-				String message = ""; 
+				
 				message = jcg.equalsChatLine(e.widget);
 				if (!message.equals("")){
 					sendMessage("SERVER: "+message);
