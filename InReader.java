@@ -1,6 +1,6 @@
 package jChat;
 
-import java.net.Inet4Address;
+import java.awt.Color;
 import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
@@ -16,18 +16,28 @@ public class InReader {
 		  return false;
 		  
 	  }
-	
+	/**
+	 * Reads IP Adress and validates it
+	 * @return valid IP Address
+	 * @throws UnknownHostException
+	 */
 	public static String ipReader () throws UnknownHostException{
 		InetAddressValidator ipVal = new InetAddressValidator();
 		String ip = JOptionPane.showInputDialog("IP");
-		if(ipVal.isValidInet4Address(ip) == true){
+		if(ipVal.isValidInet4Address(ip)){
 			return ip;
-		} else {
-			System.out.println("Ungueltige IP eingegeben");
-			ipReader();
-		}
-		return "";
-		
+		} 
+		JOptionPane.showMessageDialog(null, "Ungueltige IP eingegeben");		
+		return ipReader();
+	}
+	
+	/**
+	 * Converts hexadecimal String to Color Object
+	 * @param colossalColorString Color in Hex value (eg. #AB12FF)
+	 * @return
+	 */
+	public static Color getColor(String colossalColorString){
+		return Color.decode(colossalColorString);
 	}
 	
 	
