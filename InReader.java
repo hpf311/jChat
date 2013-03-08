@@ -24,7 +24,7 @@ public class InReader {
 	public static String ipReader () throws UnknownHostException{
 		InetAddressValidator ipVal = new InetAddressValidator();
 		String ip = JOptionPane.showInputDialog("IP");
-		if(ipVal.isValidInet4Address(ip)){
+		if(ipVal.isValidInet4Address(ip) || ip == "localhost"){
 			return ip;
 		} 
 		JOptionPane.showMessageDialog(null, "Ungueltige IP eingegeben");		
