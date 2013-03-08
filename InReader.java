@@ -18,8 +18,16 @@ public class InReader {
 	  }
 	
 	public static String ipReader () throws UnknownHostException{
+		InetAddressValidator ipVal = new InetAddressValidator();
+		String ip = JOptionPane.showInputDialog("IP");
+		if(ipVal.isValidInet4Address(ip) == true){
+			return ip;
+		} else {
+			System.out.println("Ungueltige IP eingegeben");
+			ipReader();
+		}
+		return "";
 		
-		return JOptionPane.showInputDialog("IP");
 	}
 	
 	
