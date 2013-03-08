@@ -1,5 +1,6 @@
 ﻿package jChat;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -25,19 +26,28 @@ public class SrvCom extends Thread implements JChatCom
 {
 	private JChatAuthenticator jca;
     private JChatGUI jcg;
-    private SrvChatListener scl;
     private List<Peer> ll;//Threads zu entprechenden Clientinputs
+    private NameList nl = new NameList();
 
     public SrvCom(SrvAuth jca, JChatGUI jcg) 
     {
+
+	
     	ll = new ArrayList<Peer>();
         this.jca=jca;
+//        try {
+//    			this.sleep(1000);
+//    		} catch (InterruptedException e) {
+//    			// TODO Auto-generated catch block
+//    			e.printStackTrace();
+//    		}
         this.jcg=jcg;
         this.ll=jca.getPeer();
-        scl = new SrvChatListener();
-        jcg.AddChatListener(scl);
-        jcg.addMessage("Server gestartet",null);
+        int[] cc ={0,0,0};
+        jcg.AddChatListener(new SrvChatListener());
+        jcg.addMessage("Server gestartet",cc);
         this.start();
+        jcg.open();
     }
     
     /**
@@ -81,19 +91,19 @@ public class SrvCom extends Thread implements JChatCom
 //    		if ( jcg.equalsDisconnect(e.getSource()))
 //    			stopConnection();
 //    	}
+    	
 
 		@Override
 		public void handleEvent(Event e) {
 			System.out.println("A");
 			String message = ""; 
-			message = jcg.equalsChatLine(e.widget);
 			if (e.character=='\b'){
 				
 			}else{
 				
 				message = jcg.equalsChatLine(e.widget);
 				if (!message.equals("")){
-					sendMessage("SERVER: "+message);
+					sendMessage("SERVER: "+message+"\n");
 	    			jcg.addMessage("SERVER: "+message, null);
 				}
 			}
@@ -110,9 +120,10 @@ public class SrvCom extends Thread implements JChatCom
     	private PrintWriter pw;
     	private String peerName;
     	private Socket s;
+    	private Color c = new Color (0,0,0);
     	
     	public Peer(String name){
-    		this.peerName = name;    	
+    		this.peerName = name; 
     	}
     	
     	public void addSocket( Socket s) throws IOException{
@@ -135,17 +146,32 @@ public class SrvCom extends Thread implements JChatCom
     					String message =br.readLine() ;
     					if(message != ""){
     						if(message.charAt(0)!='/'){
-    							jcg.addMessage(peerName+":"+message, null);//fuegt eingehende Nachricht lokal hinzu
-    							sendMessage(peerName+":"+message);//leitet eingehende Nachricht an alle Clients weiter.
+    							int[] a = {c.getRed(),c.getGreen(),c.getBlue()};
+    							jcg.addMessage(peerName+":"+message, a );//fuegt eingehende Nachricht lokal hinzu
+    							sendMessage(peerName+":"+message+"\n");//leitet eingehende Nachricht an alle Clients weiter.
     						}else{
     							message = message+" ";
     							String [] splitM = message.split(" ",2);
     							if (splitM[0].equals("/error"))
     								System.out.println("Error: "+splitM[1]);
     							else if (splitM[0].equals("/name")){
-    								peerName = splitM[1];
-    								pw.print("/name "+splitM[1]+"\n");
-    								pw.flush();
+    								if(nl.changeName(peerName, splitM[1])){
+    									peerName = splitM[1];
+    									pw.print("/name "+splitM[1]+"\n");
+    									pw.flush();
+    									jcg.setNameList(nl);
+    									sendMessage("/namelist ");
+    									ArrayList n = nl.getNames();
+    									sendMessage(""+n.get(0));
+    									for (int i = 1;i<nl.getNames().size();i++){
+    										sendMessage(";"+n.get(i));
+    									}
+    									sendMessage("\n");
+    								}
+    							}
+    							else if(splitM[0].equals("/col")){
+//    								c = InReader.getColor(splitM[1]);
+    								pw.print(message+"\n");
     							}
     						}
     					}
@@ -153,7 +179,6 @@ public class SrvCom extends Thread implements JChatCom
     			} catch (IOException e) {
     				e.printStackTrace();
     			}
-    			
     		}
     	}
 
@@ -177,7 +202,7 @@ public class SrvCom extends Thread implements JChatCom
 	@Override
 	public void sendMessage(String message) {
 		
-		jca.sendMessage(message+"\n");
+		jca.sendMessage(message);
 		
 	}
 

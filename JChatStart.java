@@ -25,10 +25,11 @@ public class JChatStart
     public static void main(String[] args) throws UnknownHostException {
     	if(InReader.chooser()!=true){
     	     BetterGUI sg2 = new BetterGUI();
+    	     System.out.println("Test");
     	     SrvCom sc = new SrvCom(new SrvAuth(new SrvSocket()), sg2);
     	}else{
     		
-    		InetSocketAddress isa = new InetSocketAddress(InReader.ipReader(), 11492);
+    		InetSocketAddress isa = new InetSocketAddress(InReader.ipReader(), 1492);
     		PeerSocket ps = new PeerSocket(isa);
     		PeerAuth pa = new PeerAuth(ps);
     		BetterGUI sg1 = new BetterGUI();

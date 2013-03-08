@@ -13,7 +13,7 @@ import java.util.*;
  * @author Thomas Traxler
  * @version 2013-02-22
  */
-public class SimpleGUI extends JPanel  implements JChatGUI{
+public class SimpleGUI extends JPanel  {
  
   public JTextArea chatText = null;
   public JTextField chatLine = null;
@@ -110,7 +110,7 @@ public class SimpleGUI extends JPanel  implements JChatGUI{
 	  return false;
   }
   
-  public void setName (String name){
+  public void setAName (String name){
 	  this.name=name;
 	  myName.setText("");
 	  myName.setText(name);
