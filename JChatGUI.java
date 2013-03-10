@@ -1,6 +1,6 @@
 ﻿package jChat;
 
-import jChat.SrvCom.SrvChatListener;
+
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
