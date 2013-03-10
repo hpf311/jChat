@@ -24,7 +24,7 @@ public class P2pCom extends Thread implements JChatCom {
 	private JChatAuthenticator jca;
 	private JChatGUI jcg;
 	private String peerName;
-	private Color c;
+	private int[] cc;
 	private Hashtable peers;
 	private boolean overhead;
 
@@ -38,7 +38,10 @@ public class P2pCom extends Thread implements JChatCom {
 		// e.printStackTrace();
 		// }
 		this.jcg = jcg;
-		int[] cc = { 0, 0, 0 };
+		cc = new int[3];
+		cc[0]=0;
+		cc[1]=0;
+		cc[2]=0;
 		jcg.AddChatListener(new SrvChatListener());
 		jcg.addMessage("Peer gestartet", cc);
 		this.start();
@@ -61,8 +64,7 @@ public class P2pCom extends Thread implements JChatCom {
 							message = message + " ";
 							String[] splitM = message.split(" ", 2);
 							if (splitM[0].equals("/msg")) {
-								int[] a = { c.getRed(), c.getGreen(),c.getBlue() };
-								jcg.addMessage(peerName + ":" + message, a);// fuegt eingehende Nachricht lokal hinzu
+								jcg.addMessage(peerName + ":" + message, cc);// fuegt eingehende Nachricht lokal hinzu
 								sendMessage(peerName + ":" + message + "\n");// leitet eingehende Nachricht an alle Clients weiter.
 							} else {
 								if (splitM[0].equals("/error")){
@@ -112,8 +114,9 @@ public class P2pCom extends Thread implements JChatCom {
 					if(message.charAt(0)=='/'){
 						
 					}else{
-						sendMessage("SERVER: " + message + "\n");
-						jcg.addMessage("SERVER: " + message, null);
+						
+						sendMessage("/msg " +Integer.toHexString(cc[0])+" "+Integer.toHexString(cc[1]) +" "+Integer.toHexString(cc[2])+" "+ message + "\n");
+						jcg.addMessage(peerName+": " + message, cc);
 					}
 				}
 			}
