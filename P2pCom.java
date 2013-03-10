@@ -27,7 +27,7 @@ public class P2pCom extends Thread implements JChatCom {
 	private int[] cc;
 	private Hashtable peers;
 	private boolean overhead;
-
+//TODO TU WAS
 	public P2pCom(P2pAuth jca, JChatGUI jcg) {
 
 		this.jca = jca;
