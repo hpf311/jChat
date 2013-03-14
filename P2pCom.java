@@ -112,11 +112,29 @@ public class P2pCom extends Thread implements JChatCom {
 				message = jcg.equalsChatLine(e.widget);
 				if (!message.equals("")) {
 					if(message.charAt(0)=='/'){
-						
+						String[] splitM = message.split(" ",5);
+						if(splitM[0].equals("/col")){
+							try{
+								cc[0]=Integer.parseInt(splitM[1]);
+								if(cc[0]<0 || cc[0]>255)
+									throw new NumberFormatException();
+								cc[1]=Integer.parseInt(splitM[2]);
+								if(cc[0]<0 || cc[0]>255)
+									throw new NumberFormatException();
+								cc[2]=Integer.parseInt(splitM[3]);
+								if(cc[0]<0 || cc[0]>255)
+									throw new NumberFormatException();
+							}catch(NumberFormatException nfe){
+								int a[] = {255,0,0};
+								jcg.addMessage("Invalid arguments", a);
+								cc[0]=0;
+								cc[1]=0;
+								cc[2]=0;
+							}
+						}
 					}else{
 						
 						sendMessage("/msg " +Integer.toHexString(cc[0])+" "+Integer.toHexString(cc[1]) +" "+Integer.toHexString(cc[2])+" "+ message + "\n");
-						jcg.addMessage(peerName+": " + message, cc);
 					}
 				}
 			}

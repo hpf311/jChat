@@ -22,15 +22,24 @@ public class BetterGUI extends Thread implements  JChatGUI {
 	private Text text;
 	private Button btnNewButton;
 	private Table chatText;
-	private Integer tablecount, namecount;
+	private Integer tablecount, namecount, maxMessageBuffer;
 	private Display d;
 	private boolean isNewText=false, isNewName= false;
-	private String newText;
-	private int[] args ={0,0,0};
+	private String[] newText;
+	private int[][] args;
 	private ArrayList<String> namelist = new ArrayList<String>();
 	private Label lblInit;
 
 	public BetterGUI() {
+		maxMessageBuffer=25;
+		newText = new String[maxMessageBuffer];
+		args = new int[maxMessageBuffer][3];
+		for(int i = 0;i<3;i++){
+			for (int ii=0;ii<maxMessageBuffer;ii++){
+				newText[ii]="";
+				args[ii][i]=0;
+			}
+		}
 		d = new Display();
 		s = new Shell(d);
 		s.setSize(450, 320);
@@ -87,16 +96,7 @@ public class BetterGUI extends Thread implements  JChatGUI {
 				SWT.DEFAULT));
 
 		tablecount = 0;
-//		while (tablecount < 100) {
-//
-//			chatText.setItemCount(tablecount+1);
-//			chatText.getItems()[tablecount].setForeground(new Color(d, tablecount*2,100,0));
-//			chatText.getItems()[tablecount].setText("a" + tablecount);
-//			tablecount++;
-//			
-//		}
 		s.open();
-//		notifyAll();
 	}
 
 	
@@ -110,10 +110,14 @@ public class BetterGUI extends Thread implements  JChatGUI {
 	}
 	@Override
 	public void addMessage(String inMessage, int[] args) {
-		// TODO set Color
-		//chatText.getItems()[tablecount].setForeground(new Color(d, tablecount*20,100,0));
-		newText=inMessage;
-		this.args=args;
+		int i =0;
+		for(;i<maxMessageBuffer&&!newText[i].equals("");i++);
+		if(i==maxMessageBuffer){
+			System.exit(99);//Bufferoverflow beendet Programm zum Schutz vor floating
+			//Hoffentlich passiert das nie....
+		}
+		newText[i]=inMessage;
+		this.args[i]=args;
 		isNewText=true;
 
 	}
@@ -158,12 +162,18 @@ public class BetterGUI extends Thread implements  JChatGUI {
 				d.sleep();
 			}
 			if(isNewText){
-				chatText.setItemCount(tablecount+1);
 				
 //				chatText.getItems()[tablecount].setForeground(new Color(d, args[0], args[1], args[2]));
-				chatText.getItems()[tablecount].setText(newText);
-				chatText.showItem(chatText.getItems()[tablecount]);
-				tablecount++;
+				for (int i =0;newText[i]!="";i++){
+
+					chatText.setItemCount(tablecount+1);
+					chatText.getItems()[tablecount].setForeground(new Color(d, args[i][0], args[i][1], args[i][2]));
+					chatText.getItems()[tablecount].setText(newText[i]);
+					chatText.showItem(chatText.getItems()[tablecount]);
+					tablecount++;
+					newText[i]="";
+				}
+				
 				isNewText=false;
 			}
 			if(isNewName){
