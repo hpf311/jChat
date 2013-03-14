@@ -11,7 +11,15 @@ public class P2pSocket implements JChatSocket {
 
 	InetAddress group;
 	MulticastSocket s;
-
+	
+	public P2pSocket(){
+		try {
+			startConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Starts connection
 	 */
