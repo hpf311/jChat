@@ -172,6 +172,7 @@ public class BetterGUI extends Thread implements  JChatGUI {
 					chatText.showItem(chatText.getItems()[tablecount]);
 					tablecount++;
 					newText[i]="";
+					
 				}
 				
 				isNewText=false;

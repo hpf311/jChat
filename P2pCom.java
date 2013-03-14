@@ -65,7 +65,8 @@ public class P2pCom extends Thread implements JChatCom {
 							message.append( " ");
 							String[] splitM = message.toString().split(" ", 5);
 							if (splitM[0].equals("/msg")) {
-								jcg.addMessage(peerName + ":" + splitM[4], cc);// fuegt eingehende Nachricht lokal hinzu
+								int[] c = {Integer.parseInt(splitM[1]),Integer.parseInt(splitM[2]),Integer.parseInt(splitM[3])};
+								jcg.addMessage(peerName + ":" + splitM[4], c);// fuegt eingehende Nachricht lokal hinzu
 							} else {
 								if (splitM[0].equals("/error")){
 									System.out.println("Error: " + splitM[1]);
@@ -133,8 +134,7 @@ public class P2pCom extends Thread implements JChatCom {
 							}
 						}
 					}else{
-						
-						sendMessage("/msg " +Integer.toHexString(cc[0])+" "+Integer.toHexString(cc[1]) +" "+Integer.toHexString(cc[2])+" "+ message + "\n");
+						sendMessage("/msg " +cc[0]+" "+cc[1] +" "+cc[2]+" "+ message + "\n");
 					}
 				}
 			}
