@@ -37,7 +37,7 @@ public class P2pCom extends Thread implements JChatCom {
 		cc[1]=0;
 		cc[2]=0;
 		jcg.AddChatListener(new SrvChatListener());
-		peerName="Peer_"+(int)(Math.random()*10000)+1000;
+		peerName="Peer_"+(int)(Math.random()*10000);
 		
 		peers.add(peerName);
 		jcg.setAName(peerName);
