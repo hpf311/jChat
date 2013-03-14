@@ -50,9 +50,10 @@ public class P2pCom extends Thread implements JChatCom {
 
 	
 	public void run() {
-		String message = "";
+		StringBuilder message;
 		while (true) {
 			try {
+				message = new StringBuilder();
 				if (jca.ready(message)) {
 					if (overhead) {// Wenn es nicht User Kommunikation ist
 						if (message.equals("end")) {// Overhead ende
@@ -60,12 +61,11 @@ public class P2pCom extends Thread implements JChatCom {
 						} else if (true) {// Nicht User Kommunikation
 						}
 					} else {
-						if (message != "") {
-							message = message + " ";
-							String[] splitM = message.split(" ", 2);
+						if (!message.equals("")) {
+							message.append( " ");
+							String[] splitM = message.toString().split(" ", 5);
 							if (splitM[0].equals("/msg")) {
-								jcg.addMessage(peerName + ":" + message, cc);// fuegt eingehende Nachricht lokal hinzu
-								sendMessage(peerName + ":" + message + "\n");// leitet eingehende Nachricht an alle Clients weiter.
+								jcg.addMessage(peerName + ":" + splitM[4], cc);// fuegt eingehende Nachricht lokal hinzu
 							} else {
 								if (splitM[0].equals("/error")){
 									System.out.println("Error: " + splitM[1]);
@@ -219,7 +219,12 @@ public class P2pCom extends Thread implements JChatCom {
 	@Override
 	public void sendMessage(String message) {
 
-		jca.sendMessage(message);
+		try {
+			jca.sendMessage(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

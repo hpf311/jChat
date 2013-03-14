@@ -13,10 +13,10 @@ public interface JChatAuthenticator
 {
 
     
-    public void sendMessage (String message);
+    public void sendMessage (String message) throws IOException;
     public void stopConnection();
     public void accept( APeer p) throws IOException;
-    public boolean ready(String msg) throws IOException;
+	boolean ready(StringBuilder msg) throws IOException;
 
 
 }

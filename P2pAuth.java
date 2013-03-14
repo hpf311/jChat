@@ -13,9 +13,8 @@ public class P2pAuth implements JChatAuthenticator
 	}
 
 	@Override
-	public void sendMessage(String message) {
-		// TODO Auto-generated method stub
-		
+	public void sendMessage(String message) throws IOException {
+		p2ps.sendMessage(message);
 	}
 
 	@Override
@@ -30,7 +29,8 @@ public class P2pAuth implements JChatAuthenticator
 		
 	}
 	
-	public boolean ready(String msg) throws IOException{
+	@Override
+	public boolean ready(StringBuilder msg) throws IOException{
 		return p2ps.ready(msg);
 	}
 

@@ -56,11 +56,11 @@ public class P2pSocket implements JChatSocket {
 	 * @param msg String to write the message to
 	 */
 	@Override
-	public boolean ready(String msg) throws IOException {
+	public boolean ready(StringBuilder msg) throws IOException {
 		byte[] buf = new byte[1000];
 		DatagramPacket recv = new DatagramPacket(buf, buf.length);
 		s.receive(recv);
-		msg = new String(buf, 0, recv.getLength());
+		msg.append( new String(buf, 0, recv.getLength()));
 		if (msg.length() > 0)
 			return true;
 		else
