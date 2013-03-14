@@ -149,6 +149,7 @@ public class P2pCom extends Thread implements JChatCom {
 							}else{
 
 								peers.remove(peerName);
+								sendMessage ("/msg 0 125 50 "+peerName+ " changed his name to "+splitM[1]);
 								peerName = splitM[1];
 								peers.add(peerName);
 								jcg.setAName(peerName);
@@ -179,6 +180,7 @@ public class P2pCom extends Thread implements JChatCom {
 	@Override
 	public void stopConnection() {
 		peers.remove(peerName);
+		sendMessage("/msg 0 125 50 "+peerName+" left the chat");
 		peerName=null;
 		sendMessage("/namelist "+peers.toString());
 		jca.stopConnection();
