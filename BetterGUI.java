@@ -145,8 +145,9 @@ public class BetterGUI extends Thread implements  JChatGUI {
 	@Override
 	public void AddChatListener(ChatListener cl) {
 		
-//		text.addListener(SWT.MouseDown,cl);
+		text.addListener(SWT.KeyDown,cl);
 		btnNewButton.addListener(SWT.MouseDown, cl);
+		
 		
 		
 	}

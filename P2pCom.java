@@ -117,12 +117,10 @@ public class P2pCom extends Thread implements JChatCom {
 
 		@Override
 		public void handleEvent(Event e) {
-			System.out.println("A");
 			String message = "";
-			if (e.character == '\b') {
-
+			
+			if ((e.keyCode<13||e.keyCode>13)&&e.keyCode!=0) {
 			} else {
-
 				message = jcg.equalsChatLine(e.widget);
 				if (!message.equals("")) {
 					//Nicht Chatnachricht
@@ -161,7 +159,7 @@ public class P2pCom extends Thread implements JChatCom {
 							}
 						}
 					}else{
-						sendMessage("/msg " +cc[0]+" "+cc[1] +" "+cc[2]+" "+ message + "\n");
+						sendMessage("/msg " +cc[0]+" "+cc[1] +" "+cc[2]+" "+ message);
 					}
 				}
 			}
@@ -183,6 +181,9 @@ public class P2pCom extends Thread implements JChatCom {
 
 	@Override
 	public void stopConnection() {
+		peers.remove(peerName);
+		peerName=null;
+		sendMessage("/namelist "+peers.toString());
 		jca.stopConnection();
 
 	}
