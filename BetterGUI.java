@@ -156,6 +156,11 @@ public class BetterGUI extends Thread implements  JChatGUI {
 		// TODO Tu was
 
 	}
+	
+	public void setNameList(ArrayList<String> names){
+		this.namelist=names;
+		this.isNewName=true;
+	}
 	public void open (){
 		while (!s.isDisposed()) {
 			if (!d.readAndDispatch()) {
@@ -186,6 +191,7 @@ public class BetterGUI extends Thread implements  JChatGUI {
 				isNewName=false;
 			}
 		}
+		
 	}
 
 
@@ -194,5 +200,10 @@ public class BetterGUI extends Thread implements  JChatGUI {
 		namelist = nl.getNames();
 		isNewName = true;
 
+	}
+
+
+	public boolean isDisposed() {
+		return s.isDisposed();
 	}
 }

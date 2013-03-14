@@ -22,13 +22,13 @@ import org.eclipse.swt.widgets.Listener;
 // ausstatten
 public class P2pCom extends Thread implements JChatCom {
 	private JChatAuthenticator jca;
-	private JChatGUI jcg;
+	private BetterGUI jcg;
 	private String peerName;
 	private int[] cc;
-	private Hashtable peers;
+	private ArrayList<String> peers= new ArrayList<String>();;
 	private boolean overhead;
 //TODO TU WAS
-	public P2pCom(P2pAuth jca, JChatGUI jcg) {
+	public P2pCom(P2pAuth jca, BetterGUI jcg) {
 
 		this.jca = jca;
 		// try {
@@ -46,6 +46,9 @@ public class P2pCom extends Thread implements JChatCom {
 		jcg.addMessage("Peer gestartet", cc);
 		this.start();
 		jcg.open();
+		peerName="Peer_"+(Math.random()*10000)+1000;
+		
+		peers.add(peerName);
 	}
 
 	
@@ -55,6 +58,11 @@ public class P2pCom extends Thread implements JChatCom {
 			try {
 				message = new StringBuilder();
 				if (jca.ready(message)) {
+					if(jcg.isDisposed()){
+						stopConnection();
+						System.exit(0);
+						//FEATURE: Programmschluss erst bei neuer eingehender Nachricht :)
+					}
 					if (overhead) {// Wenn es nicht User Kommunikation ist
 						if (message.equals("end")) {// Overhead ende
 							overhead = false;
@@ -72,6 +80,19 @@ public class P2pCom extends Thread implements JChatCom {
 									System.out.println("Error: " + splitM[1]);
 								}else if (splitM[0].equals("/overhead")) {
 									overhead = true;
+								}else if (splitM[0].equals("/namelist")){
+									peers.clear();
+									String m = message.toString().split(" ",2)[1].substring(1);
+									for(int i = 0; i < m.split(" ").length;i++){
+										peers.add(m.split(" ")[i].substring(0, m.split(" ")[i].length()-1));
+									}
+									if(peers.indexOf(peerName)==-1){
+										peers.add(peerName);
+										
+										sendMessage("/namelist "+peers.toString());
+										
+									}
+									jcg.setNameList(peers);
 								}
 							}
 						}
@@ -80,6 +101,7 @@ public class P2pCom extends Thread implements JChatCom {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
 		}
 	}
 
@@ -92,15 +114,6 @@ public class P2pCom extends Thread implements JChatCom {
 	 */
 	public class SrvChatListener implements ChatListener {
 
-		// public void actionPerformed(ActionEvent e) {
-		// String message = jcg.equalsChatLine(e.getSource());
-		// if ( !message.equals("")) {
-		// sendMessage("SERVER: "+message);
-		// jcg.addMessage("SERVER: "+message, null);
-		// }
-		// if ( jcg.equalsDisconnect(e.getSource()))
-		// stopConnection();
-		// }
 
 		@Override
 		public void handleEvent(Event e) {
@@ -112,8 +125,10 @@ public class P2pCom extends Thread implements JChatCom {
 
 				message = jcg.equalsChatLine(e.widget);
 				if (!message.equals("")) {
+					//Nicht Chatnachricht
 					if(message.charAt(0)=='/'){
 						String[] splitM = message.split(" ",5);
+						//Farbenaenderung
 						if(splitM[0].equals("/col")){
 							try{
 								cc[0]=Integer.parseInt(splitM[1]);
@@ -132,6 +147,18 @@ public class P2pCom extends Thread implements JChatCom {
 								cc[1]=0;
 								cc[2]=0;
 							}
+							//Namensaenderung
+						}else if(splitM[0].equals("/name")){
+							if(peers.indexOf(splitM[1])!=-1){
+								int[] c = {255,0,0};
+								jcg.addMessage("NAME VERGEBEN", c);
+							}else{
+
+								peers.remove(peerName);
+								peerName = splitM[1];
+								peers.add(peerName);
+								sendMessage("/namelist "+peers.toString());
+							}
 						}
 					}else{
 						sendMessage("/msg " +cc[0]+" "+cc[1] +" "+cc[2]+" "+ message + "\n");
@@ -141,98 +168,6 @@ public class P2pCom extends Thread implements JChatCom {
 
 		}
 	}
-
-	/**
-	 * Listenerthread für einen Clientinput
-	 * 
-	 * @author Thomas Traxler
-	 * 
-	 */
-	// public class P2pList extends Properties implements APeer{
-	// private String peerName;
-	// private Color c = new Color (0,0,0);
-	//
-	// public P2pList(String name){
-	// this.peerName = name;
-	// }
-	//
-	// public void updated (PrintWriter pw){
-	// this.list(pw);
-	// }
-	//
-	// public void update (BufferedReader br) throws IOException{
-	// this.load(br);
-	// }
-	//
-	//
-	// // public void addSocket( Socket s) throws IOException{
-	// // this.s=s;
-	// // this.br = new BufferedReader(new
-	// InputStreamReader(s.getInputStream()));
-	// // this.pw = new PrintWriter(s.getOutputStream(), true);
-	// //
-	// // pw.print("/name "+peerName+"\n");
-	// // }
-	//
-	// // public void run(){
-	// // while(true){
-	// // try {
-	// // this.sleep(100);
-	// // } catch (InterruptedException e1) {
-	// // e1.printStackTrace();
-	// // }
-	// // try {
-	// // if(br.ready()){
-	// // String message =br.readLine() ;
-	// // if(message != ""){
-	// // if(message.charAt(0)!='/'){
-	// // int[] a = {c.getRed(),c.getGreen(),c.getBlue()};
-	// // jcg.addMessage(peerName+":"+message, a );//fuegt eingehende Nachricht
-	// lokal hinzu
-	// // sendMessage(peerName+":"+message+"\n");//leitet eingehende Nachricht
-	// an alle Clients weiter.
-	// // }else{
-	// // message = message+" ";
-	// // String [] splitM = message.split(" ",2);
-	// // if (splitM[0].equals("/error"))
-	// // System.out.println("Error: "+splitM[1]);
-	// // else if (splitM[0].equals("/name")){
-	// // if(nl.changeName(peerName, splitM[1])){
-	// // peerName = splitM[1];
-	// // pw.print("/name "+splitM[1]+"\n");
-	// // pw.flush();
-	// // jcg.setNameList(nl);
-	// // sendMessage("/namelist ");
-	// // ArrayList n = nl.getNames();
-	// // sendMessage(""+n.get(0));
-	// // for (int i = 1;i<nl.getNames().size();i++){
-	// // sendMessage(";"+n.get(i));
-	// // }
-	// // sendMessage("\n");
-	// // }
-	// // }
-	// // else if(splitM[0].equals("/col")){
-	// //// c = InReader.getColor(splitM[1]);
-	// // pw.print(message+"\n");
-	// // }
-	// // }
-	// // }
-	// // }
-	// // } catch (IOException e) {
-	// // e.printStackTrace();
-	// // }
-	// // }
-	// // }
-	//
-	// public String getPeerName() {
-	// return peerName;
-	// }
-	//
-	// public void setPeerName(String name) {
-	// this.peerName = name;
-	// }
-	//
-	// }
 
 	@Override
 	public void sendMessage(String message) {
