@@ -31,29 +31,25 @@ public class P2pCom extends Thread implements JChatCom {
 	public P2pCom(P2pAuth jca, BetterGUI jcg) {
 
 		this.jca = jca;
-		// try {
-		// this.sleep(1000);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 		this.jcg = jcg;
 		cc = new int[3];
 		cc[0]=0;
 		cc[1]=0;
 		cc[2]=0;
 		jcg.AddChatListener(new SrvChatListener());
+		peerName="Peer_"+(int)(Math.random()*10000)+1000;
+		
+		peers.add(peerName);
+		jcg.setAName(peerName);
 		jcg.addMessage("Peer gestartet", cc);
 		this.start();
 		jcg.open();
-		peerName="Peer_"+(Math.random()*10000)+1000;
-		
-		peers.add(peerName);
 	}
 
 	
 	public void run() {
 		StringBuilder message;
+		sendMessage("/namelist "+peers.toString());
 		while (true) {
 			try {
 				message = new StringBuilder();
@@ -74,7 +70,7 @@ public class P2pCom extends Thread implements JChatCom {
 							String[] splitM = message.toString().split(" ", 5);
 							if (splitM[0].equals("/msg")) {
 								int[] c = {Integer.parseInt(splitM[1]),Integer.parseInt(splitM[2]),Integer.parseInt(splitM[3])};
-								jcg.addMessage(peerName + ":" + splitM[4], c);// fuegt eingehende Nachricht lokal hinzu
+								jcg.addMessage(splitM[4], c);// fuegt eingehende Nachricht lokal hinzu
 							} else {
 								if (splitM[0].equals("/error")){
 									System.out.println("Error: " + splitM[1]);
@@ -125,7 +121,7 @@ public class P2pCom extends Thread implements JChatCom {
 				if (!message.equals("")) {
 					//Nicht Chatnachricht
 					if(message.charAt(0)=='/'){
-						String[] splitM = message.split(" ",5);
+						String[] splitM = (message+" ").split(" ",5);
 						//Farbenaenderung
 						if(splitM[0].equals("/col")){
 							try{
@@ -155,11 +151,12 @@ public class P2pCom extends Thread implements JChatCom {
 								peers.remove(peerName);
 								peerName = splitM[1];
 								peers.add(peerName);
+								jcg.setAName(peerName);
 								sendMessage("/namelist "+peers.toString());
 							}
 						}
 					}else{
-						sendMessage("/msg " +cc[0]+" "+cc[1] +" "+cc[2]+" "+ message);
+						sendMessage("/msg " +cc[0]+" "+cc[1] +" "+cc[2]+" "+ peerName + ":" +message);
 					}
 				}
 			}

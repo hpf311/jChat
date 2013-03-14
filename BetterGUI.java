@@ -29,6 +29,7 @@ public class BetterGUI extends Thread implements  JChatGUI {
 	private int[][] args;
 	private ArrayList<String> namelist = new ArrayList<String>();
 	private Label lblInit;
+	private String peerName;
 
 	public BetterGUI() {
 		maxMessageBuffer=25;
@@ -154,7 +155,8 @@ public class BetterGUI extends Thread implements  JChatGUI {
 
 	@Override
 	public void setAName(String name) {
-		// TODO Tu was
+		this.peerName=name;
+		this.isNewName=true;
 
 	}
 	
@@ -185,6 +187,7 @@ public class BetterGUI extends Thread implements  JChatGUI {
 			}
 			if(isNewName){
 				nametable.setItemCount(0);
+				lblInit.setText(peerName);
 				for (namecount = 0;namecount < namelist.size();namecount++){
 					nametable.setItemCount(namecount+1);
 					nametable.getItems()[namecount].setText(namelist.get(namecount));
