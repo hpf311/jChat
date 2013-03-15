@@ -1,4 +1,4 @@
-﻿package jChat;
+package jChat;
 
 import java.net.UnknownHostException;
 

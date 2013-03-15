@@ -1,4 +1,4 @@
-﻿package jChat;
+package jChat;
 
 
 
