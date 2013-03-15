@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Build XML -->
-<project basedir="." default="build" name="VSDB_JavaChat">
+<project basedir="." default="build" name="jChat">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../eclipse"/>
+    <property name="ECLIPSE_HOME" value="../../../../JAVA"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
     <path id="jChat.classpath">
-        <pathelement location="bin"/>
-        <pathelement location="swing2swt.jar"/>
-        <pathelement location="swt-debug.jar"/>
-        <pathelement location="swt.jar"/>
+        <pathelement location="../../swt/bin"/>
+        <pathelement location="../../swt/swing2swt.jar"/>
+        <pathelement location="../../swt/swt-debug.jar"/>
+        <pathelement location="../../swt/swt.jar"/>
     </path>
     <target name="init">
-        <mkdir dir="bin"/>
+        <mkdir dir="../../antbin"/>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
+            <fileset dir="../../src">
                 <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
@@ -29,9 +29,9 @@
     <target name="build-subprojects"/>
     <target depends="init" name="compile">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-            <src path="src"/>
-            <classpath refid="VSDB_JavaChat.classpath"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="../../antbin" source="${source}" target="${target}">
+            <src path="../../src"/>
+            <classpath refid="jChat.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -46,11 +46,11 @@
     </target>
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
+        <antcall target="../build"/>
     </target>
     <target name="run">
-        <java classname="ChatMain" failonerror="true" fork="yes">
-            <classpath refid="VSDB_JavaChat.classpath"/>
+        <java classname="JChatStart" failonerror="true" fork="yes">
+            <classpath refid="jChat.classpath"/>
         </java>
     </target>
 	<!-- Javadoc-->
