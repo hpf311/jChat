@@ -2,8 +2,8 @@
 
 
 
-import javax.swing.JButton;
-import javax.swing.JTextField;
+import java.util.ArrayList;
+
 
 
 
@@ -15,7 +15,5 @@ public interface JChatGUI
 	  public String equalsChatLine(Object source);
 	  public void AddChatListener(ChatListener scl);
 	  public void setAName (String name);
-	  public void setNameList (NameList nl);
-	  public void open();
-	  public void addWriter (Runnable r);
+	  public void setNameList (ArrayList<String> nl);
 }

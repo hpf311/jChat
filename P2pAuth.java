@@ -3,7 +3,11 @@
 import java.io.IOException;
 
 
-
+/**
+ * uthentifizierungsschicht, noch funtkionsfrei.
+ * @author Thomas Traxler
+ *
+ */
 public class P2pAuth implements JChatAuthenticator
 {
 	P2pSocket p2ps;
@@ -19,15 +23,15 @@ public class P2pAuth implements JChatAuthenticator
 
 	@Override
 	public void stopConnection() {
-		// TODO Auto-generated method stub
+		try {
+			p2ps.stopConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
-	@Override
-	public void accept(APeer p) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public boolean ready(StringBuilder msg) throws IOException{

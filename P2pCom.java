@@ -1,15 +1,9 @@
 ﻿package jChat;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 
 /**
  * P2P Logik
@@ -18,25 +12,32 @@ import org.eclipse.swt.widgets.Listener;
  * @version 2013-02-22
  * 
  */
-// TODO: Kommando verwaltung nur Serverseitig Client-Objekte mit weiteren Daten
-// ausstatten
+
+
 public class P2pCom extends Thread implements JChatCom {
 	private JChatAuthenticator jca;
 	private BetterGUI jcg;
 	private String peerName;
-	private int[] cc;
-	private ArrayList<String> peers= new ArrayList<String>();;
-	private boolean overhead;
-//TODO TU WAS
+	private int[] cc;//Farbeinstellung
+	private ArrayList<String> peers= new ArrayList<String>();//Liste aller peers
+	private boolean overhead;//Nicht in verwendung. Fuer weitere Funktionen hilfreich.
+
+	/**
+	 * Einzig zulaessiger Konstruktor mit kompatibler Gui und Authschicht
+	 * @param jca
+	 * @param jcg
+	 */
 	public P2pCom(P2pAuth jca, BetterGUI jcg) {
 
 		this.jca = jca;
 		this.jcg = jcg;
+		//Defaultfarbe Schwarz
 		cc = new int[3];
 		cc[0]=0;
 		cc[1]=0;
 		cc[2]=0;
-		jcg.AddChatListener(new SrvChatListener());
+		jcg.AddChatListener(new PeerChatListener());
+		//Default'Name
 		peerName="Peer_"+(int)(Math.random()*10000);
 		
 		peers.add(peerName);
@@ -49,6 +50,7 @@ public class P2pCom extends Thread implements JChatCom {
 	
 	public void run() {
 		StringBuilder message;
+		//Namelist update
 		sendMessage("/namelist "+peers.toString());
 		while (true) {
 			try {
@@ -59,35 +61,43 @@ public class P2pCom extends Thread implements JChatCom {
 						System.exit(0);
 						//FEATURE: Programmschluss erst bei neuer eingehender Nachricht :)
 					}
+					
+					//Noch nicht verwendete Funktion. 
 					if (overhead) {// Wenn es nicht User Kommunikation ist
 						if (message.equals("end")) {// Overhead ende
 							overhead = false;
 						} else if (true) {// Nicht User Kommunikation
 						}
+						
 					} else {
 						if (!message.equals("")) {
-							message.append( " ");
+							//Wichtig, Schutz vor zu wenig Textteilen.
+							message.append(" ");
 							String[] splitM = message.toString().split(" ", 5);
-							if (splitM[0].equals("/msg")) {
-								int[] c = {Integer.parseInt(splitM[1]),Integer.parseInt(splitM[2]),Integer.parseInt(splitM[3])};
+							if (splitM[0].equals("/msg")) {//Ist eingehende Nachricht von User
+								int[] c = {Integer.parseInt(splitM[1]),Integer.parseInt(splitM[2]),Integer.parseInt(splitM[3])};//Farbaufschluesselung der eingehenden Nachricht.
 								jcg.addMessage(splitM[4], c);// fuegt eingehende Nachricht lokal hinzu
-							} else {
+							} else {//Ist eingehende Nachricht von keinem User sondern Programm
+								
 								if (splitM[0].equals("/error")){
 									System.out.println("Error: " + splitM[1]);
 								}else if (splitM[0].equals("/overhead")) {
 									overhead = true;
-								}else if (splitM[0].equals("/namelist")){
+								}else if (splitM[0].equals("/namelist")){//Eingehende Namensliste
+									//Uebernehmen
 									peers.clear();
 									String m = message.toString().split(" ",2)[1].substring(1);
 									for(int i = 0; i < m.split(" ").length;i++){
 										peers.add(m.split(" ")[i].substring(0, m.split(" ")[i].length()-1));
 									}
+									//Falls eigener Name bei eingegangener Liste nicht vorhanden, hinzufuegen und eigene Liste zurueckschicken.
 									if(peers.indexOf(peerName)==-1){
 										peers.add(peerName);
 										
 										sendMessage("/namelist "+peers.toString());
 										
 									}
+									//Gui-update
 									jcg.setNameList(peers);
 								}
 							}
@@ -102,22 +112,20 @@ public class P2pCom extends Thread implements JChatCom {
 	}
 
 	/**
-	 * Server ChatListener Leitet ausgehende nachrichten an sendMessage weiter
-	 * und fuegt sie der lokalen Anzeige hinzu Leitet Beenden ein.
+	 * Peer ChatListener Leitet ausgehende nachrichten an sendMessage weiter. Anzeige erfolgt durch emofangen der eigenenen Nachricht.
 	 * 
 	 * @author Thomas Traxler
 	 * 
 	 */
-	public class SrvChatListener implements ChatListener {
+	public class PeerChatListener implements ChatListener {
 
 
 		@Override
 		public void handleEvent(Event e) {
 			String message = "";
 			
-			if ((e.keyCode<13||e.keyCode>13)&&e.keyCode!=0) {
-			} else {
-				message = jcg.equalsChatLine(e.widget);
+			if (e.keyCode==13 || e.keyCode==0){ //Wenn enter gedrueckt oder nicht Tastaturevent.
+				message = jcg.equalsChatLine(e.widget);//Wenn Event von dieser Gui kommt)
 				if (!message.equals("")) {
 					//Nicht Chatnachricht
 					if(message.charAt(0)=='/'){
@@ -155,8 +163,13 @@ public class P2pCom extends Thread implements JChatCom {
 								jcg.setAName(peerName);
 								sendMessage("/namelist "+peers.toString());
 							}
+						}else {
+							int c[] = {255, 0, 0};
+							jcg.addMessage("Command not found.", c);
 						}
-					}else{
+					}else{//if(message.charAt(0)=='/')
+						//Nachricht senden. Form:
+						// /msg Red Green Blue peername:message
 						sendMessage("/msg " +cc[0]+" "+cc[1] +" "+cc[2]+" "+ peerName + ":" +message);
 					}
 				}
@@ -171,12 +184,14 @@ public class P2pCom extends Thread implements JChatCom {
 		try {
 			jca.sendMessage(message);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-
+	
+	/**
+	 * Peer beenden
+	 */
 	@Override
 	public void stopConnection() {
 		peers.remove(peerName);

@@ -9,14 +9,17 @@ import org.eclipse.swt.graphics.*;
 
 import swing2swt.layout.BorderLayout;
 
-//TODO SWT SWT SWT SWT SWT SWT SWT SWT SWT SWT SWT SWT
+/**
+ * SWT-GUI fuer jChat
+ * @author Thomas Traxler
+ *
+ */
 
 public class BetterGUI extends Thread implements  JChatGUI {
 
 	private Shell s;
 	private ScrolledComposite scrolledComposite;
 	private Table nametable;
-	private Composite composite;
 	private Composite composite_1;
 	private ScrolledComposite scrolledComposite_1;
 	private Text text;
@@ -25,8 +28,8 @@ public class BetterGUI extends Thread implements  JChatGUI {
 	private Integer tablecount, namecount, maxMessageBuffer;
 	private Display d;
 	private boolean isNewText=false, isNewName= false;
-	private String[] newText;
-	private int[][] args;
+	private String[] newText;//Buffer fuer neue texte
+	private int[][] args;//Buffer fuer zu text gehoerende Argumente (Farbe)
 	private ArrayList<String> namelist = new ArrayList<String>();
 	private Label lblInit;
 	private String peerName;
@@ -34,32 +37,18 @@ public class BetterGUI extends Thread implements  JChatGUI {
 	public BetterGUI() {
 		maxMessageBuffer=25;
 		newText = new String[maxMessageBuffer];
-		args = new int[maxMessageBuffer][3];
+		args = new int[maxMessageBuffer][3];//Umstellen bei aenderung der Arguemntsanzahl!
 		for(int i = 0;i<3;i++){
 			for (int ii=0;ii<maxMessageBuffer;ii++){
 				newText[ii]="";
 				args[ii][i]=0;
 			}
 		}
+		
 		d = new Display();
 		s = new Shell(d);
 		s.setSize(450, 320);
 		s.setLayout(new BorderLayout(0, 0));
-
-		Menu menu = new Menu(s, SWT.BAR);
-		s.setMenuBar(menu);
-
-		MenuItem mntmDatei = new MenuItem(menu, SWT.NONE);
-		mntmDatei.setText("Datei");
-
-		MenuItem mntmSettings = new MenuItem(menu, SWT.CASCADE);
-		mntmSettings.setText("Settings");
-
-		Menu menu_1 = new Menu(mntmSettings);
-		mntmSettings.setMenu(menu_1);
-
-		MenuItem mntmSetName = new MenuItem(menu_1, SWT.NONE);
-		mntmSetName.setText("set Name");
 
 		scrolledComposite = new ScrolledComposite(s, SWT.BORDER | SWT.H_SCROLL
 				| SWT.V_SCROLL);
@@ -101,14 +90,7 @@ public class BetterGUI extends Thread implements  JChatGUI {
 	}
 
 	
-	public void run (){
-		while(true){
-			
-				
-			
-		}
-		
-	}
+	
 	@Override
 	public void addMessage(String inMessage, int[] args) {
 		int i =0;
@@ -117,22 +99,24 @@ public class BetterGUI extends Thread implements  JChatGUI {
 			System.exit(99);//Bufferoverflow beendet Programm zum Schutz vor floating
 			//Hoffentlich passiert das nie....
 		}
+		//Nachricht im Buffer hinzufuegen
 		newText[i]=inMessage;
 		this.args[i]=args;
 		isNewText=true;
 
 	}
 
-	public void addWriter (Runnable r){
-//		this.start();
-//		d.syncExec(this);
-	}
+	/**
+	 * Disconnect Button nicht implementiert
+	 */
 	@Override
 	public boolean equalsDisconnect(Object button) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Liefert Text im Eingabefeld zurueck wenn source dem TExtfeld oder Button entspricht.
+	 */
 	@Override
 	public String equalsChatLine(Object source) {
 		String s = "";
@@ -153,25 +137,33 @@ public class BetterGUI extends Thread implements  JChatGUI {
 		
 	}
 
+	/**
+	 * Setzt den lokal angezeigten namen
+	 */
 	@Override
 	public void setAName(String name) {
 		this.peerName=name;
 		this.isNewName=true;
 
 	}
-	
+	/**
+	 * Setzt die angezeigte Namensliste
+	 */
+	@Override
 	public void setNameList(ArrayList<String> names){
 		this.namelist=names;
 		this.isNewName=true;
 	}
+	
+	
 	public void open (){
 		while (!s.isDisposed()) {
 			if (!d.readAndDispatch()) {
 				d.sleep();
 			}
+			
 			if(isNewText){
-				
-//				chatText.getItems()[tablecount].setForeground(new Color(d, args[0], args[1], args[2]));
+				//Buffer leeren und anzeigen
 				for (int i =0;newText[i]!="";i++){
 
 					chatText.setItemCount(tablecount+1);
@@ -197,14 +189,7 @@ public class BetterGUI extends Thread implements  JChatGUI {
 		}
 		
 	}
-
-
-	@Override
-	public void setNameList(NameList nl) {
-		namelist = nl.getNames();
-		isNewName = true;
-
-	}
+	
 
 
 	public boolean isDisposed() {
